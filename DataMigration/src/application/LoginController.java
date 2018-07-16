@@ -3,6 +3,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.java.bo.BulkHelper;
+import com.java.bo.SfConnection;
+import com.sforce.async.AsyncApiException;
+import com.sforce.soap.partner.DescribeGlobalResult;
+import com.sforce.ws.ConnectionException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +43,25 @@ public class LoginController implements Initializable  {
 	@FXML
 	public void handleLogin(ActionEvent ae) throws IOException, InterruptedException {
 		//Call Login Method 
-		//Update Status on Login UI 
+		String endPoint ="https://login.salesforce.com/services/Soap/u/41.0";
+		String apiVer ="42.0";
+		SfConnection sfConnc=null;
+		try {
+			sfConnc = BulkHelper.login("aman.msharma14@gmail.com", "deloitte.1LjQxdEAfWdMTlvfZsRf2i88G", endPoint, apiVer);
+		} catch (ConnectionException | AsyncApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DescribeGlobalResult result= BulkHelper.fetchAllObjects(sfConnc);
+		ApplicationContext.dgr=result;
+		
+		System.out.println("\nDescribe Global Results:\n");
+	    for (int i = 0; i < result.getSobjects().length; i++) 
+	    {
+	    	System.out.println(result.getSobjects()[i].getName());
+	    } 
+		//Update Status on Login UI
+	    ApplicationContext.loginStatus="Successful";
 		//Create new scene 
 		URL location = Main.class.getResource(HOME_FXML);
 		Parent homePg = FXMLLoader.load(location);
@@ -45,7 +69,7 @@ public class LoginController implements Initializable  {
 		Main.getPrimaryStage().setScene(homePgV);
 		//Navigate to newly created scene
 		System.out.println("Login Completed.Please wait !");
-		authStatus.setText("Login Pressed");
+		
 		//Thread.sleep(4000);
 		
 	}
