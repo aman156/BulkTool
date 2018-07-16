@@ -2,6 +2,6 @@ package application;
 
 import javafx.fxml.FXML;
 
-public class DeleteViewController {
+public class DeleteViewController  {
 
 }
