@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.media.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="541.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="541.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomePageController">
    <children>
    	 <HBox layoutY="2.0" prefHeight="25.0" prefWidth="618.0" style="-fx-background-color: #dee2e8;">
          <children>
@@ -51,5 +54,6 @@
       <Label layoutX="204.0" layoutY="243.0" text="450" />
       <Label layoutX="204.0" layoutY="284.0" text="305" />
       <Label layoutX="54.0" layoutY="349.0" text="Select an operation to process : " />
+      <Button layoutX="453.0" layoutY="416.0" mnemonicParsing="false" onAction="#export" text="Export" />
    </children>
 </AnchorPane>
