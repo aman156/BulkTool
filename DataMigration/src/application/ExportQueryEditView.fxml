@@ -1,8 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
 
+<AnchorPane prefHeight="593.0" prefWidth="613.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="application.ExportQueryEditViewController">
+   <children>
+      <TableView layoutX="14.0" layoutY="106.0" prefHeight="426.0" prefWidth="558.0">
+        <columns>
+          <TableColumn prefWidth="23.0" />
+            <TableColumn editable="false" prefWidth="127.0" text="Object Label" />
+            <TableColumn editable="false" prefWidth="75.0" text="API Name" />
+            <TableColumn editable="false" prefWidth="223.0" text="Query" />
+            <TableColumn prefWidth="65.0" text="Edit Query" />
+          <TableColumn prefWidth="44.0" text="Delete" />
+        </columns>
+      </TableView>
+      <Button layoutX="522.0" layoutY="547.0" mnemonicParsing="false" text="Export" />
+      <Button layoutX="460.0" layoutY="547.0" mnemonicParsing="false" text="Cancel" />
+      <Label alignment="CENTER" layoutX="14.0" layoutY="547.0" prefHeight="25.0" prefWidth="167.0" text="C:\Users\amansharma\Desktop\" />
+      <Button layoutX="191.0" layoutY="547.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="Location" textOverrun="WORD_ELLIPSIS">
+         <font>
+            <Font name="Arial" size="10.0" />
+         </font>
+      </Button>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label layoutX="14.0" layoutY="68.0" prefHeight="17.0" prefWidth="273.0" text="List of selected objects:">
+         <font>
+            <Font name="AdobeDevanagari-Regular" size="17.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
