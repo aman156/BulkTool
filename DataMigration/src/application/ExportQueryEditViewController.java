@@ -37,7 +37,7 @@ public class ExportQueryEditViewController implements Initializable{
 			ch.setSelected(true);
 			Button editQueryButton = new Button("Edit Query");
 			Button deleteQueryButton = new Button("Delete Query");
-			//String objName = dgrStr.get
+			//String fields = dgrStr.getFields();
 			SelectedObjects selObj = new SelectedObjects(dgrStr.getLabel(),dgrStr.getName(),"Select * from Obj1__c",editQueryButton,ch,deleteQueryButton);
 			selectedList.add(selObj);
 		}
