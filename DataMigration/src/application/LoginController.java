@@ -7,6 +7,8 @@ import com.java.bo.BulkHelper;
 import com.java.bo.SfConnection;
 import com.sforce.async.AsyncApiException;
 import com.sforce.soap.partner.DescribeGlobalResult;
+import com.sforce.soap.partner.DescribeSObjectResult;
+import com.sforce.soap.partner.DescribeSObject_element;
 import com.sforce.ws.ConnectionException;
 
 import javafx.event.ActionEvent;
@@ -54,11 +56,14 @@ public class LoginController implements Initializable  {
 		}
 		DescribeGlobalResult result= BulkHelper.fetchAllObjects(sfConnc);
 		ApplicationContext.dgr=result;
+		DescribeSObjectResult[] t = null;
 		
 		System.out.println("\nDescribe Global Results:\n");
 	    for (int i = 0; i < result.getSobjects().length; i++) 
 	    {
+	    	//result.getSobjects()[i].
 	    	System.out.println(result.getSobjects()[i].getName());
+	    	//System.out.println(result.getSobjects()[i].getD
 	    } 
 		//Update Status on Login UI
 	    ApplicationContext.loginStatus="Successful";

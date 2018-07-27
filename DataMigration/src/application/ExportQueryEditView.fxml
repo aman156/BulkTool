@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.web.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="593.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ExportQueryEditViewController">
+<AnchorPane prefHeight="593.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ExportQueryEditViewController">
    <children>
-      <TableView layoutX="14.0" layoutY="106.0" prefHeight="426.0" prefWidth="558.0">
+      <TableView fx:id="table" layoutX="14.0" layoutY="106.0" prefHeight="426.0" prefWidth="558.0">
         <columns>
-          <TableColumn prefWidth="23.0" />
-            <TableColumn editable="false" prefWidth="127.0" text="Object Label" />
-            <TableColumn editable="false" prefWidth="75.0" text="API Name" />
-            <TableColumn editable="false" prefWidth="223.0" text="Query" />
-            <TableColumn prefWidth="65.0" text="Edit Query" />
-          <TableColumn prefWidth="44.0" text="Delete" />
+          <TableColumn fx:id="isSelected" prefWidth="23.0" />
+            <TableColumn id="name" fx:id="name" editable="false" prefWidth="127.0" text="Object Label" />
+            <TableColumn id="apiName" fx:id="apiName" editable="false" prefWidth="75.0" text="API Name" />
+            <TableColumn id="query" fx:id="query" editable="false" prefWidth="223.0" text="Query" />
+            <TableColumn id="editedQuery" fx:id="editedQuery" prefWidth="65.0" text="Edit Query" />
+          <TableColumn fx:id="deleteRecord" prefWidth="44.0" text="Delete" />
         </columns>
       </TableView>
       <Button layoutX="429.0" layoutY="547.0" mnemonicParsing="false" text="Cancel">

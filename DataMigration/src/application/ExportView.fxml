@@ -47,5 +47,8 @@
       <Button layoutX="283.0" layoutY="246.0" mnemonicParsing="false" onAction="#getSelectedList" text="&gt;&gt;" />
       <Button layoutX="282.0" layoutY="307.0" mnemonicParsing="false" onAction="#getAvailableList" text="&lt;&lt;" />
       <Button layoutX="356.0" layoutY="64.0" mnemonicParsing="false" onAction="#getSearchObject" prefHeight="17.0" prefWidth="79.0" text="Search" />
+      <Button layoutX="130.0" layoutY="483.0" mnemonicParsing="false" text="Upload" />
+      <Button layoutX="283.0" layoutY="483.0" mnemonicParsing="false" onAction="#download" text="Download" />
+      <Button layoutX="445.0" layoutY="483.0" mnemonicParsing="false" onAction="#next" text="Next" />
    </children>
 </AnchorPane>
