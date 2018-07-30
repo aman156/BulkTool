@@ -22,7 +22,7 @@ public class SelectedObjects {
 		this.deleteQuery = deleteQuery;
 	}
 	public CheckBox getIsSelected() {
-		return isSelected;
+		return isSelected; 
 	}
 	public void setIsSelected(CheckBox isSelected) {
 		this.isSelected = isSelected;
