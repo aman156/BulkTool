@@ -14,5 +14,6 @@ public  class ApplicationContext {
     public static DescribeGlobalResult dgr;
     public static DescribeGlobalSObjectResult selectedObjectsGlobalList;
     public static HashMap<String, DescribeGlobalSObjectResult> selObjectsMap;
-    DescribeSObjectResult[] fields;
+    public static DescribeSObjectResult[] fields;
+    public static HashMap<String, DescribeSObjectResult> objectMap;
 }

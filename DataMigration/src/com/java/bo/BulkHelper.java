@@ -6,16 +6,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.sforce.async.AsyncApiException;
 import com.sforce.async.BulkConnection;
 import com.sforce.soap.partner.DescribeGlobalResult;
+import com.sforce.soap.partner.DescribeSObjectResult;
+import com.sforce.soap.partner.Field;
 import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.soap.partner.QueryResult;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
+
+import application.ApplicationContext;
 
 public class BulkHelper {
 	
@@ -83,6 +88,31 @@ public class BulkHelper {
 	    return dgr;
 	}
 	
+	public static HashMap<String,List<Field>> getFieldsForSObjects(List<String> objectName) 
+	{
+		HashMap<String,List<Field>> map = new HashMap<>();
+		DescribeSObjectResult dsr = null;
+		try{		
+			for(String obj: objectName)
+			{
+				Field[] fields=null;
+					dsr =sfConnection.getPartnerConnection().describeSObject(obj);
+				
+				if(dsr !=null)
+				{
+					fields = dsr.getFields();
+				}
+				if(fields !=null)
+				{
+					map.put(obj,Arrays.asList(fields));
+				}	
+			}
+		 }catch (ConnectionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return map;
+	}
 
 	public PartnerConnection getPartnerConnection() {
 		return partnerConnection;
@@ -112,6 +142,7 @@ public class BulkHelper {
 	         ce.printStackTrace();
 	      }
 	   }
+
 	
 	 public List<SObject> querySObject(String soqlQuery) {
 		  
