@@ -1,9 +1,19 @@
 package com.java.bo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.sforce.async.AsyncApiException;
 import com.sforce.async.BulkConnection;
 import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.partner.QueryResult;
+import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
@@ -12,7 +22,8 @@ public class BulkHelper {
 	private static PartnerConnection partnerConnection=null;
 	private static BulkConnection bulkConnection=null;
 	private static SfConnection sfConnection = null;
-	
+ private static BufferedReader reader = new BufferedReader(
+	         new InputStreamReader(System.in));
 
 	/**
 	 * Create the BulkConnection used to call Bulk API operations.
@@ -25,7 +36,6 @@ public class BulkHelper {
 	    connectorConfig.setPassword(password);
 	    connectorConfig.setAuthEndpoint("https://login.salesforce.com/services/Soap/u/42.0");
 	    partnerConnection =	new PartnerConnection(connectorConfig);
-	   
 	    // When PartnerConnection is instantiated, a login is implicitly
 	    // executed and, if successful,
 	    // a valid session is stored in the ConnectorConfig instance.
@@ -50,6 +60,11 @@ public class BulkHelper {
 	    return sfConnection;
 	}
 	
+	public static File getBulkObjectData(SfConnection sfConnection)
+	{
+		
+		return null;
+	}
 	
 	public static DescribeGlobalResult fetchAllObjects(SfConnection sfConnection) 
 	{
@@ -78,7 +93,62 @@ public class BulkHelper {
 		return bulkConnection;
 	}
 
+	public String getUserInput(String prompt) {
+	      String result = "";
+	      try {
+	         System.out.print(prompt);
+	         result = reader.readLine();
+	      } catch (IOException ioe) {
+	         ioe.printStackTrace();
+	      }
 
+	      return result;
+	   }
+	public void logout() {
+	      try {
+	    	  partnerConnection.logout();
+	         System.out.println("Logged out.");
+	      } catch (ConnectionException ce) {
+	         ce.printStackTrace();
+	      }
+	   }
+	
+	 public List<SObject> querySObject(String soqlQuery) {
+		  
+		 List<SObject> recordList = new ArrayList<>();
+	     // soqlQuery = "SELECT FirstName, LastName FROM Contact";
+	      try {
+	         QueryResult qr = partnerConnection.query(soqlQuery);
+	         boolean done = false;
+
+	         if (qr.getSize() > 0) {
+	            System.out.println("\nLogged-in user can see "
+	                  + qr.getRecords().length + " contact records.");
+
+	            while (!done) {
+	               System.out.println("");
+	               recordList.addAll(Arrays.asList(qr.getRecords()));
+	               if (qr.isDone()) {
+	                  done = true;
+	               } else {
+	                  qr = partnerConnection.queryMore(qr.getQueryLocator());
+	               }
+	            }
+	         } else {
+	            System.out.println("No records found.");
+	         }
+	      } catch (ConnectionException ce) {
+	         ce.printStackTrace();
+	      }
+	      
+	      return recordList;
+	   }
+
+	 public boolean validateQuery()
+	 {
+		 
+		 return false;
+	 }
 	
 	
 }
