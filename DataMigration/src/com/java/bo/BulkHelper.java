@@ -71,6 +71,46 @@ public class BulkHelper {
 		return null;
 	}
 	
+	public static void exportAll(HashMap<String, ExportWrapper> exportMap)
+	{
+		try {
+		QueryResult qResult = null;
+		for(String objName : exportMap.keySet())
+		{
+			boolean done=false;
+			ExportWrapper expWrapper 	= exportMap.get(objName);
+			String queryStr				= expWrapper.queryString;
+			sfConnection.getPartnerConnection().setQueryOptions(2000);
+			System.out.println("Fetching started for "+objName+" Object.");
+			qResult 					=sfConnection.getPartnerConnection().query(queryStr);
+			if(qResult.getSize()>0)
+			{
+				 while (!done)
+				 {
+					 SObject[] records = qResult.getRecords() ;
+					 expWrapper.records.addAll(Arrays.asList(records));
+					 
+					 if(qResult.isDone())
+					 {
+						 done = true;
+					 }else
+					 {
+						 qResult = sfConnection.getPartnerConnection().queryMore(qResult.getQueryLocator());
+					 }
+				 }
+			}else
+			{
+				 System.out.println("No records found.");
+			}
+				 System.out.println("\nQuery succesfully executed.");
+		}
+		}catch(ConnectionException ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return;
+	}
 	public static DescribeGlobalResult fetchAllObjects(SfConnection sfConnection) 
 	{
 		if(sfConnection==null || sfConnection.getPartnerConnection()==null)
