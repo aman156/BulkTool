@@ -1,6 +1,9 @@
 package application;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.java.bo.BulkHelper;
@@ -9,6 +12,7 @@ import com.sforce.async.AsyncApiException;
 import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeSObjectResult;
 import com.sforce.soap.partner.DescribeSObject_element;
+import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
 import javafx.event.ActionEvent;
@@ -56,16 +60,18 @@ public class LoginController implements Initializable  {
 		}
 		DescribeGlobalResult result= BulkHelper.fetchAllObjects(sfConnc);
 		ApplicationContext.dgr=result;
-		DescribeSObjectResult[] t = null;
-		
+		HashMap<String,List<Field>> objectFieldMap = new HashMap<String,List<Field>>();
 		System.out.println("\nDescribe Global Results:\n");
 	    for (int i = 0; i < result.getSobjects().length; i++) 
 	    {
-	    	//result.getSobjects()[i].
-	    	System.out.println(result.getSobjects()[i].getName());
-	    	//System.out.println(result.getSobjects()[i].getD
+	    	//System.out.println(result.getSobjects()[i].getName());
 	    } 
+	    List<String> selectedObject= new ArrayList<String>();
+	    selectedObject.add("Parent__c");
+	    HashMap<String,List<Field>> map = BulkHelper.getFieldsForSObjects(selectedObject);
+	    System.out.println(map.get("Parent__c").size());
 		//Update Status on Login UI
+	    
 	    ApplicationContext.loginStatus="Successful";
 		//Create new scene 
 		URL location = Main.class.getResource(HOME_FXML);
