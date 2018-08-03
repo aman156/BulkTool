@@ -37,7 +37,7 @@
             </MenuBar>
          </children>
       </HBox>
-      <Canvas height="477.0" layoutX="15.0" layoutY="45.0" width="586.0" />
+      <Canvas height="477.0" layoutX="85.0" layoutY="64.0" width="586.0" />
       <ListView fx:id="clonedAvailbleList" layoutX="63.0" layoutY="149.0" prefHeight="315.0" prefWidth="185.0" />
       <ListView fx:id="selectedList" layoutX="378.0" layoutY="149.0" prefHeight="315.0" prefWidth="185.0" />
       <Label layoutX="63.0" layoutY="123.0" prefHeight="8.0" prefWidth="177.0" text="Available Objects" />
@@ -50,5 +50,7 @@
       <Button layoutX="130.0" layoutY="483.0" mnemonicParsing="false" text="Upload" />
       <Button layoutX="283.0" layoutY="483.0" mnemonicParsing="false" onAction="#download" text="Download" />
       <Button layoutX="445.0" layoutY="483.0" mnemonicParsing="false" onAction="#next" text="Next" />
+      <Label fx:id="selectedNoObj" layoutX="480.0" layoutY="119.0" prefHeight="25.0" prefWidth="79.0" />
+      <Label fx:id="availableNoObj" layoutX="158.0" layoutY="119.0" prefHeight="25.0" prefWidth="71.0" />
    </children>
 </AnchorPane>

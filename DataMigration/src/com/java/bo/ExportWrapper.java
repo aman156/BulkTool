@@ -11,7 +11,12 @@ public class ExportWrapper {
 	public String objApiName;
 	public  File location;
 	public String queryString;
-	List<SObject> records = new ArrayList<>();
-	
+	public List<SObject> records = new ArrayList<>();
+	public List<String> fields = new ArrayList<String>();
+	@Override
+	public String toString() {
+		return "ExportWrapper [objApiName=" + objApiName + ", location=" + location + ", queryString=" + queryString
+				+ ", records=" + records + ", fields=" + fields + "]";
+	}
 	
 }

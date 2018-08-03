@@ -16,6 +16,8 @@ import com.sforce.async.SObject;
 import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Cell;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -47,6 +50,11 @@ public class ExportViewController implements Initializable  {
 	@FXML
 	public TextField searchObject;
 	
+	@FXML public Label selectedNoObj;
+	@FXML public Label availableNoObj;
+	private StringProperty selectedNo = new SimpleStringProperty();
+	private StringProperty availableNo = new SimpleStringProperty();
+	
 	ObservableList<String> availableObList = FXCollections.observableArrayList();
 	ObservableList<String> clonedAvailableObList = FXCollections.observableArrayList();
 	ObservableList<String> selectedObList = FXCollections.observableArrayList();
@@ -63,6 +71,11 @@ public class ExportViewController implements Initializable  {
 		clonedAvailbleList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		selectedList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		ApplicationContext.selObjectsMap = new HashMap<String, DescribeGlobalSObjectResult>();
+		availableNo.set(String.valueOf(availableObList.size()));
+		System.out.println(availableNo);
+		availableNoObj.textProperty().bindBidirectional(availableNo);
+		selectedNo.set("0");
+		selectedNoObj.textProperty().bindBidirectional(selectedNo);
 	}
 	
 	@FXML
@@ -83,7 +96,11 @@ public class ExportViewController implements Initializable  {
 				}
 			}
 		}
-		System.out.println(ApplicationContext.selObjectsMap);
+		availableNo.set(String.valueOf(clonedAvailableObList.size()));
+		availableNoObj.textProperty().bindBidirectional(availableNo);
+		selectedNo.set(String.valueOf(selectedObList.size()));
+		selectedNoObj.textProperty().bindBidirectional(selectedNo);
+		//System.out.println(ApplicationContext.selObjectsMap);
 	}
 	@FXML
 	public void getAvailableList(ActionEvent ae) throws IOException {
@@ -106,7 +123,10 @@ public class ExportViewController implements Initializable  {
 		selectedObList.removeAll(clonedSelectedObList);
 		selectedList.setItems(selectedObList);
 		selectedList.getSelectionModel().clearSelection();
-		
+		availableNo.set(String.valueOf(clonedAvailableObList.size()));
+		availableNoObj.textProperty().bindBidirectional(availableNo);
+		selectedNo.set(String.valueOf(selectedObList.size()));
+		selectedNoObj.textProperty().bindBidirectional(selectedNo);
 	}
 	@FXML
 	public void getSearchObject(ActionEvent ae) throws IOException {

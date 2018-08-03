@@ -16,4 +16,6 @@ public  class ApplicationContext {
     public static HashMap<String, DescribeGlobalSObjectResult> selObjectsMap;
     public static DescribeSObjectResult[] fields;
     public static HashMap<String, DescribeSObjectResult> objectMap;
+    public static String directoryPath =null;
+    public static String fieldStr ="";
 }

@@ -15,6 +15,7 @@ import com.sforce.soap.partner.DescribeSObject_element;
 import com.sforce.soap.partner.Field;
 import com.sforce.ws.ConnectionException;
 
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +24,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class LoginController implements Initializable  {
  
@@ -39,12 +46,10 @@ public class LoginController implements Initializable  {
 	public TextField endPoint;
 	@FXML
 	public Label authStatus;
-	 	
 	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 	}
 	@FXML
 	public void handleLogin(ActionEvent ae) throws IOException, InterruptedException {
@@ -53,24 +58,15 @@ public class LoginController implements Initializable  {
 		String apiVer ="42.0";
 		SfConnection sfConnc=null;
 		try {
-			sfConnc = BulkHelper.login("aman.msharma14@gmail.com", "deloitte.1LjQxdEAfWdMTlvfZsRf2i88G", endPoint, apiVer);
+			sfConnc = BulkHelper.login("aman.msharma14@gmail.com", "Deloitte@1As05Ayx2ytm0yDRpaQuScie1k", endPoint, apiVer);
 		} catch (ConnectionException | AsyncApiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		DescribeGlobalResult result= BulkHelper.fetchAllObjects(sfConnc);
 		ApplicationContext.dgr=result;
-		HashMap<String,List<Field>> objectFieldMap = new HashMap<String,List<Field>>();
-		System.out.println("\nDescribe Global Results:\n");
-	    for (int i = 0; i < result.getSobjects().length; i++) 
-	    {
-	    	//System.out.println(result.getSobjects()[i].getName());
-	    } 
-	    List<String> selectedObject= new ArrayList<String>();
-	    selectedObject.add("Parent__c");
-	    HashMap<String,List<Field>> map = BulkHelper.getFieldsForSObjects(selectedObject);
-	    System.out.println(map.get("Parent__c").size());
 		//Update Status on Login UI
+		
 	    
 	    ApplicationContext.loginStatus="Successful";
 		//Create new scene 
@@ -80,7 +76,6 @@ public class LoginController implements Initializable  {
 		Main.getPrimaryStage().setScene(homePgV);
 		//Navigate to newly created scene
 		System.out.println("Login Completed.Please wait !");
-		
 		//Thread.sleep(4000);
 		
 	}

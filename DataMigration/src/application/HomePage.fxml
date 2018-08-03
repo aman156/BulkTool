@@ -39,7 +39,7 @@
       <Button layoutX="252.0" layoutY="416.0" mnemonicParsing="false" text="Upsert" />
       <Button layoutX="347.0" layoutY="416.0" mnemonicParsing="false" text="Delete" />
       <MediaView fitHeight="200.0" fitWidth="200.0" layoutX="323.0" layoutY="128.0" />
-      <Label layoutX="49.0" layoutY="67.0" text="Welcome Guest !" />
+      <Label fx:id="userName" layoutX="49.0" layoutY="67.0" prefHeight="25.0" prefWidth="190.0" />
       <Label layoutX="47.0" layoutY="161.0" text="Total Objects :" />
       <Label layoutX="49.0" layoutY="201.0" text="Total Classes :" />
       <Label layoutX="49.0" layoutY="111.0" text="Know your Salesforce Org.">
