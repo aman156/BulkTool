@@ -1,41 +1,28 @@
 package application;
+import java.beans.EventHandler;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import com.java.bo.BulkHelper;
-import com.java.bo.SfConnection;
-import com.sforce.async.AsyncApiException;
-import com.sforce.soap.partner.DescribeGlobalResult;
-import com.sforce.soap.partner.DescribeSObjectResult;
-import com.sforce.soap.partner.DescribeSObject_element;
-import com.sforce.soap.partner.Field;
-import com.sforce.ws.ConnectionException;
-
-import javafx.beans.property.StringProperty;
+import application.TaskExecutor.TASK;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class LoginController implements Initializable  {
  
 	private static final String HOME_FXML = "HomePage.fxml";
-	
+	private static final String spinnerPath = "\\spinner.gif";
 	@FXML
 	public TextField username;
 	@FXML
@@ -45,44 +32,64 @@ public class LoginController implements Initializable  {
 	@FXML
 	public TextField endPoint;
 	@FXML
+	public TextField apiVersion;
+	@FXML
 	public Label authStatus;
+	@FXML 
+	public ImageView spinner;
+	@FXML
+	public Button loginBtn;
 	
+	@FXML
+	public Button cancelBtn;
 	
+	TaskExecutor taskExecutor =null;
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	}
 	@FXML
 	public void handleLogin(ActionEvent ae) throws IOException, InterruptedException {
-		//Call Login Method 
-		String endPoint ="https://login.salesforce.com/services/Soap/u/41.0";
-		String apiVer ="42.0";
-		SfConnection sfConnc=null;
-		try {
-			sfConnc = BulkHelper.login("aman.msharma14@gmail.com", "Deloitte@1As05Ayx2ytm0yDRpaQuScie1k", endPoint, apiVer);
-		} catch (ConnectionException | AsyncApiException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		DescribeGlobalResult result= BulkHelper.fetchAllObjects(sfConnc);
-		ApplicationContext.dgr=result;
-		//Update Status on Login UI
 		
-	    
-	    ApplicationContext.loginStatus="Successful";
+		spinner.setFitHeight(25);
+		spinner.setFitWidth(25);
+		spinner.setImage(new Image(Main.class.getResourceAsStream("spinner.gif")));
+		ApplicationContext.username="aman.msharma14@gmail.com";//username.getText();
+		ApplicationContext.password="Deloitte@1As05Ayx2ytm0yDRpaQuScie1k";//password.getText();
+		ApplicationContext.endPoint=endPoint.getText();
+		//ApplicationContext.apiVersion=apiVersion.getText();
+		
+		taskExecutor =TaskExecutor.getTaskExecutor(TASK.LOGIN);
+		authStatus.textProperty().bind(taskExecutor.messageProperty());
+		
+		new Thread(taskExecutor).start();
+		
+		taskExecutor.setOnSucceeded(new javafx.event.EventHandler<WorkerStateEvent>() {
+			
+			@Override
+			public void handle(WorkerStateEvent arg0) {
+				spinner.setImage(null);
+				URL location = Main.class.getResource(HOME_FXML);
+				try {
+				Parent homePg = FXMLLoader.load(location);
+				Scene homePgV = new Scene(homePg);
+				Main.getPrimaryStage().setScene(homePgV);
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				//Navigate to newly created scene
+			}
+		});
 		//Create new scene 
-		URL location = Main.class.getResource(HOME_FXML);
-		Parent homePg = FXMLLoader.load(location);
-		Scene homePgV = new Scene(homePg);
-		Main.getPrimaryStage().setScene(homePgV);
-		//Navigate to newly created scene
-		System.out.println("Login Completed.Please wait !");
-		//Thread.sleep(4000);
-		
+				
+				//Thread.sleep(4000);
 	}
 	
 	@FXML
 	public void handleCancel(ActionEvent ae) {
-		System.exit(0);
+		spinner.setImage(null);
+		taskExecutor.cancelled();
 		System.out.println("Cancel Pressed");
 	}
 	

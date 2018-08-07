@@ -12,8 +12,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
-	private static final String imgPath = "\\win.png";
-	private static final String protocol = "file:";
 	private static final String TITLE = "Data Migration Tool";
 	private static final String ROOT_FXML = "MainWindow.fxml";
 	public  static Stage primaryStage  ;
@@ -24,8 +22,6 @@ public class Main extends Application {
 			this.primaryStage = primaryStage;
 			//BorderPane root = new BorderPane();
 			//Scene scene = new Scene(root,400,400);
-			String rootpath = System.getProperty("user.dir");
-			System.out.println(rootpath);
 			URL url = Main.class.getResource(ROOT_FXML);
 			System.out.println("location: "+url );
 			Parent root = FXMLLoader.load(url);
@@ -33,7 +29,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			primaryStage.setTitle(TITLE);
-			primaryStage.getIcons().add(new Image(protocol+rootpath+imgPath));
+			primaryStage.getIcons().add(new Image(ApplicationContext.protocol+ApplicationContext.rootpath+ApplicationContext.imgPath));
 			primaryStage.setScene(scene);
 			 primaryStage.setResizable(false);
 			primaryStage.show();
