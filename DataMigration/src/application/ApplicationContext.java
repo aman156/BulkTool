@@ -7,6 +7,9 @@ import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 import com.sforce.soap.partner.DescribeSObjectResult;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+
 public  class ApplicationContext {
 
 	public static SfConnection sfConnection =null;
@@ -25,5 +28,7 @@ public  class ApplicationContext {
 	public static String password ="";
 	public static String endPoint ="";
 	public static String apiVersion ="";
+	public static Scene currentScene =null;
+	public static ObservableList<DescribeGlobalSObjectResult> queryableSObjList=null;
 
 }

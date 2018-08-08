@@ -2,35 +2,35 @@ package application;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.sl.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.sforce.async.SObject;
-import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -62,6 +62,8 @@ public class ExportViewController implements Initializable  {
 	
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		System.out.println("Checking queryable objects :"+ApplicationContext.queryableSObjList.size());
 		for (int i = 0; i < ApplicationContext.dgr.getSobjects().length; i++) 
 	    {
 			availableObList.add(ApplicationContext.dgr.getSobjects()[i].getName());
@@ -130,6 +132,7 @@ public class ExportViewController implements Initializable  {
 	}
 	@FXML
 	public void getSearchObject(ActionEvent ae) throws IOException {
+		System.out.println("getSearchObject");
 		String searchObjStr = searchObject.getText();
 		clonedAvailableObList = clonedAvailbleList.getItems();
 		boolean isObjPresent = clonedAvailableObList.contains(searchObjStr);
@@ -138,6 +141,24 @@ public class ExportViewController implements Initializable  {
 			clonedAvailableObList.add(searchObjStr);
 		}
 		clonedAvailbleList.setItems(clonedAvailableObList);
+	}
+	@FXML
+	public void searchAction(ActionEvent ae) throws IOException {
+		
+		System.out.println("availableObList size"+availableObList);
+		FilteredList<String> filteredObjects = new FilteredList<>(availableObList, s -> true);
+		searchObject.textProperty().addListener(obs ->{
+			String enteredText = searchObject.getText();
+			if(enteredText==null || enteredText.length()==0)
+			{
+				filteredObjects.setPredicate(s->true);
+			}else
+			{
+				filteredObjects.setPredicate(s->s.toLowerCase().startsWith(enteredText.toLowerCase()));
+			}
+		});
+		clonedAvailbleList.setItems(filteredObjects);
+		clonedAvailbleList.refresh();
 	}
 	@FXML
 	public void download(ActionEvent ae) throws IOException {

@@ -103,14 +103,14 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="107.0" layoutY="383.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="17.0" prefWidth="61.0" text="Cancel">
+      <Button layoutX="107.0" layoutY="383.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="17.0" prefWidth="61.0" text="Cancel">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Label fx:id="authStatus" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="299.0" layoutY="391.0" prefHeight="17.0" prefWidth="67.0" textFill="#0808d7" wrapText="true">
+      <Label fx:id="authStatus" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="259.0" layoutY="385.0" prefHeight="30.0" prefWidth="98.0" textFill="#0808d7" wrapText="true">
          <font>
-            <Font name="Calibri" size="12.0" />
+            <Font name="Cambria" size="13.0" />
          </font></Label>
       <ImageView fx:id="spinner" fitHeight="25.0" fitWidth="25.0" layoutX="366.0" layoutY="387.0" pickOnBounds="true" preserveRatio="true" />
    </children>

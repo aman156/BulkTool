@@ -1,5 +1,4 @@
 package application;
-import java.beans.EventHandler;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,7 +48,7 @@ public class LoginController implements Initializable  {
 	}
 	@FXML
 	public void handleLogin(ActionEvent ae) throws IOException, InterruptedException {
-		
+		System.out.println("LoginController-inside handleLogin");
 		spinner.setFitHeight(25);
 		spinner.setFitWidth(25);
 		spinner.setImage(new Image(Main.class.getResourceAsStream("spinner.gif")));
@@ -73,17 +72,17 @@ public class LoginController implements Initializable  {
 				Parent homePg = FXMLLoader.load(location);
 				Scene homePgV = new Scene(homePg);
 				Main.getPrimaryStage().setScene(homePgV);
+				System.out.println("new task to extract queryable objects");
+				TaskExecutor	extrct =TaskExecutor.getTaskExecutor(TASK.QUERYABLE);
+				new Thread(extrct).start();
 				}catch(Exception e)
 				{
 					e.printStackTrace();
-				}
-				
-				//Navigate to newly created scene
+				}				
 			}
 		});
-		//Create new scene 
-				
-				//Thread.sleep(4000);
+		
+		System.out.println("LoginController-exit handleLogin");
 	}
 	
 	@FXML
@@ -91,6 +90,14 @@ public class LoginController implements Initializable  {
 		spinner.setImage(null);
 		taskExecutor.cancelled();
 		System.out.println("Cancel Pressed");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		authStatus.textProperty().unbind();
+		authStatus.setText("");
 	}
 	
 }
