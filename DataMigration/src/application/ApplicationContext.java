@@ -2,6 +2,7 @@ package application;
 
 import java.util.HashMap;
 
+import com.java.bo.ExportWrapper;
 import com.java.bo.SfConnection;
 import com.sforce.soap.partner.DescribeGlobalResult;
 import com.sforce.soap.partner.DescribeGlobalSObjectResult;
@@ -30,5 +31,10 @@ public  class ApplicationContext {
 	public static String apiVersion ="";
 	public static Scene currentScene =null;
 	public static ObservableList<DescribeGlobalSObjectResult> queryableSObjList=null;
+	public static final String spinnerPath = "\\spinner.gif";
+	public static HashMap<String, ExportWrapper> exportMap;
+	public static final String COMMA_DELIMITER = ",";
+	public static final String NEW_LINE_SEPARATOR = "\n";
+	public static ObservableList<SelectedObjects> selectedList ;
 
 }

@@ -17,15 +17,19 @@ import com.sforce.soap.partner.Field;
 import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.bind.XmlObjectWrapper;
 
+import application.TaskExecutor.TASK;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -34,6 +38,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -48,11 +54,10 @@ public class ExportQueryEditViewController implements Initializable{
 	@FXML	private TableColumn<SelectedObjects, String> query;
 	@FXML	private TableColumn<SelectedObjects, Button> editedQuery;
 	@FXML	private TableColumn<SelectedObjects, Button> deleteRecord;
-	public ObservableList<SelectedObjects> selectedList = FXCollections.observableArrayList();
-	public ObservableList<SelectedObjects> exportList = FXCollections.observableArrayList();
+	@FXML 	public ImageView spinner;
+	@FXML 	public Label exportSts;
+	//public ObservableList<SelectedObjects> selectedList = FXCollections.observableArrayList();
 	public String fieldsStr;
-	private static final String COMMA_DELIMITER = ",";
-	private static final String NEW_LINE_SEPARATOR = "\n";
 
 	@FXML public Label filePath;
 	private StringProperty filePathStr = new SimpleStringProperty();
@@ -61,6 +66,8 @@ public class ExportQueryEditViewController implements Initializable{
 	@Override 
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		ObservableList<SelectedObjects> tempselectedList = FXCollections.observableArrayList();
+		ApplicationContext.selectedList=tempselectedList;
 		Integer counter=-1;
 		for(DescribeGlobalSObjectResult dgrStr : ApplicationContext.selObjectsMap.values()) {
 			counter++;
@@ -81,8 +88,8 @@ public class ExportQueryEditViewController implements Initializable{
 			fieldsStr = fieldsStr.concat(" from "+dgrStr.getName());
 			System.out.println(counter);
 			SelectedObjects selObj = new SelectedObjects(counter,dgrStr.getLabel(),dgrStr.getName(),fieldsStr,editQueryButton,ch,deleteQueryButton,fields);
-			selectedList.add(selObj);
-			selectedList.sorted();
+			tempselectedList.add(selObj);
+			tempselectedList.sorted();
 			editQueryButton.setOnAction(new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent event) {
 	                final Stage dialog = new Stage();
@@ -109,7 +116,7 @@ public class ExportQueryEditViewController implements Initializable{
 							qStr.set(query.getText());
 							selObj.setQuery(qStr);
 							System.out.println(selObj.getIndex());
-							selectedList.get(selObj.getIndex()).setQuery(qStr);
+							tempselectedList.get(selObj.getIndex()).setQuery(qStr);
 							table.refresh();
 							dialog.close();
 						}
@@ -128,7 +135,7 @@ public class ExportQueryEditViewController implements Initializable{
 	         });
 			deleteQueryButton.setOnAction(new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent event) {
-	                selectedList.remove(selObj);
+	            	tempselectedList.remove(selObj);
 	            }
 	         });
 		}
@@ -138,7 +145,7 @@ public class ExportQueryEditViewController implements Initializable{
 		editedQuery.setCellValueFactory(new PropertyValueFactory<SelectedObjects, Button>("editedQuery"));
 		isSelected.setCellValueFactory(new PropertyValueFactory<SelectedObjects, CheckBox>("isSelected"));
 		deleteRecord.setCellValueFactory(new PropertyValueFactory<SelectedObjects, Button>("deleteQuery"));
-		table.setItems(selectedList);
+		table.setItems(tempselectedList);
 	}
 	public void exit(ActionEvent event) {
 		System.exit(0);
@@ -158,63 +165,25 @@ public class ExportQueryEditViewController implements Initializable{
 		
 	}
 	public void exportObjects(ActionEvent event) {
-		HashMap<String, ExportWrapper> exportMap = new HashMap<String, ExportWrapper>();
-		List<String> objLst = new ArrayList<String>();
-		for(SelectedObjects str : selectedList) {
-			ExportWrapper expWrap = new ExportWrapper();
-			expWrap.objApiName = str.getApiName();
-			expWrap.queryString = str.getQuery();
-			expWrap.fields = str.fields;
-			System.out.println("header fields"+expWrap.fields);
-			objLst.add(str.getApiName());
-			//expWrap.location = Directory path 
-			exportMap.put(str.getApiName(),expWrap);
-		}
-		BulkHelper.exportAll(exportMap);
-		//System.out.println("new identifier"+exportMap.get("Account"));
-		for(String objStr : objLst) {
-			ExportWrapper exp = exportMap.get(objStr);
-			if(!exp.records.isEmpty()) {
-				List<SObject> recList = exp.records;
-				List<String> fldLst = exp.fields;
-				File fileName = new File(ApplicationContext.directoryPath+objStr+".csv");
-				FileWriter fileWriter = null;
-				try {
-					fileWriter = new FileWriter(fileName);
-					for(String fldStr : fldLst) {
-						fileWriter.append(fldStr);
-						fileWriter.append(COMMA_DELIMITER);
-					}
-					fileWriter.append('\n');
+		spinner.setFitHeight(25);
+		spinner.setFitWidth(25);
+		spinner.setImage(new Image(Main.class.getResourceAsStream(ApplicationContext.spinnerPath)));
+		
+		
+		//BulkHelper.exportAll(exprtMap );
+		TaskExecutor	extrct =TaskExecutor.getTaskExecutor(TASK.EXPORT);
+		exportSts.textProperty().bind(extrct.messageProperty());
+		new Thread(extrct).start();
+		
+
+		extrct.setOnSucceeded(new javafx.event.EventHandler<WorkerStateEvent>() {
+			
+			@Override
+			public void handle(WorkerStateEvent arg0) {
+				spinner.setImage(null);
 				
-					int counter =0;
-					for(SObject rec : recList) {
-						counter++;
-						for(String fldStr : fldLst) {
-							System.out.print("field:value "+counter+" ->"+fldStr);
-							Object fieldObject =rec.getField(fldStr);
-							System.out.println(" : "+String.valueOf(rec.getField(fldStr)));
-							System.out.println("condition :"+(fieldObject instanceof XmlObjectWrapper) );
-							if(fieldObject instanceof XmlObjectWrapper ) 
-							{
-								fileWriter.append(null);
-							}else
-							{
-								fileWriter.append("\"").append(String.valueOf(rec.getField(fldStr))).append("\"");
-							}
-							fileWriter.append(COMMA_DELIMITER);
-						}
-						fileWriter.append('\n');
-					}
-					fileWriter.flush();
-					fileWriter.close();
-					System.out.println("CSV file was created successfully !!!");
-				}
-				catch(Exception ex) {
-					System.out.println("Error in CsvFileWriter !!!");
-					ex.printStackTrace();
-				}
 			}
-		}
+		});
+		//System.out.println("new identifier"+exportMap.get("Account"));
 	}//eof
 }

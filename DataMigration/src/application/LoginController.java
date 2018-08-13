@@ -21,7 +21,6 @@ import javafx.scene.image.ImageView;
 public class LoginController implements Initializable  {
  
 	private static final String HOME_FXML = "HomePage.fxml";
-	private static final String spinnerPath = "\\spinner.gif";
 	@FXML
 	public TextField username;
 	@FXML
@@ -51,7 +50,7 @@ public class LoginController implements Initializable  {
 		System.out.println("LoginController-inside handleLogin");
 		spinner.setFitHeight(25);
 		spinner.setFitWidth(25);
-		spinner.setImage(new Image(Main.class.getResourceAsStream("spinner.gif")));
+		spinner.setImage(new Image(Main.class.getResourceAsStream(ApplicationContext.spinnerPath)));
 		ApplicationContext.username="aman.msharma14@gmail.com";//username.getText();
 		ApplicationContext.password="Deloitte@1As05Ayx2ytm0yDRpaQuScie1k";//password.getText();
 		ApplicationContext.endPoint=endPoint.getText();

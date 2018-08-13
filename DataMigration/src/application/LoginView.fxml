@@ -108,7 +108,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Label fx:id="authStatus" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="259.0" layoutY="385.0" prefHeight="30.0" prefWidth="98.0" textFill="#0808d7" wrapText="true">
+      <Label fx:id="authStatus" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="259.0" layoutY="385.0" prefHeight="30.0" prefWidth="98.0" textFill="#464040" wrapText="true">
          <font>
             <Font name="Cambria" size="13.0" />
          </font></Label>
