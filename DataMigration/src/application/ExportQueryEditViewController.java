@@ -40,6 +40,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -56,6 +57,7 @@ public class ExportQueryEditViewController implements Initializable{
 	@FXML	private TableColumn<SelectedObjects, Button> deleteRecord;
 	@FXML 	public ImageView spinner;
 	@FXML 	public Label exportSts;
+	@FXML   public Button exportBtn;
 	//public ObservableList<SelectedObjects> selectedList = FXCollections.observableArrayList();
 	public String fieldsStr;
 
@@ -97,13 +99,16 @@ public class ExportQueryEditViewController implements Initializable{
 	                dialog.initModality(Modality.APPLICATION_MODAL);
 	                dialog.initOwner(primaryStage);
 	                VBox dialogVbox = new VBox(20);
+	                HBox dialogHbox = new HBox(20);
 	                Button edit = new Button("OK");
 	                Button cancel = new Button("Cancel");
 	                TextArea query = new TextArea(selObj.getQuery());
+	                query.setWrapText(true);
 	                dialogVbox.getChildren().add(query);
-	                dialogVbox.getChildren().add(edit);
-	                dialogVbox.getChildren().add(cancel);
-	                Scene dialogScene = new Scene(dialogVbox,400, 200);
+	                dialogHbox.getChildren().add(edit);
+	                dialogHbox.getChildren().add(cancel);
+	                dialogVbox.getChildren().add(dialogHbox);
+	                Scene dialogScene = new Scene(dialogVbox,400,200);
 	                dialog.setScene(dialogScene);
 	                dialog.show();
 	                edit.setOnAction(new EventHandler<ActionEvent>() {
@@ -155,7 +160,7 @@ public class ExportQueryEditViewController implements Initializable{
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Csv Files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         Stage primaryStage = new Stage();
-        //fileChooser.setInitialFileName(" ");
+        fileChooser.setInitialFileName(" ");
         File file = fileChooser.showSaveDialog(primaryStage);
         String fileLoc = file.getAbsolutePath();
 		System.out.println(fileLoc);
@@ -165,6 +170,7 @@ public class ExportQueryEditViewController implements Initializable{
 		
 	}
 	public void exportObjects(ActionEvent event) {
+		exportBtn.setDisable(true);
 		spinner.setFitHeight(25);
 		spinner.setFitWidth(25);
 		spinner.setImage(new Image(Main.class.getResourceAsStream(ApplicationContext.spinnerPath)));

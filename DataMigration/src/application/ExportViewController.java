@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,6 +29,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -58,6 +60,7 @@ public class ExportViewController implements Initializable  {
 	ObservableList<String> clonedAvailableObList = FXCollections.observableArrayList();
 	ObservableList<String> selectedObList = FXCollections.observableArrayList();
 	ObservableList<String> clonedSelectedObList = FXCollections.observableArrayList();
+	
 	
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -142,22 +145,32 @@ public class ExportViewController implements Initializable  {
 		clonedAvailbleList.setItems(clonedAvailableObList);
 	}
 	@FXML
-	public void searchAction(ActionEvent ae) throws IOException {
-		
-		System.out.println("availableObList size"+availableObList);
-		FilteredList<String> filteredObjects = new FilteredList<>(availableObList, s -> true);
+	public void searchAction(KeyEvent ae) throws IOException {
+		System.out.println("in ActionEvent --> " + searchObject.getText());
+		clonedAvailableObList = clonedAvailbleList.getItems();
+		FilteredList<String> filteredObjects = new FilteredList<>(clonedAvailableObList, s -> true);
 		searchObject.textProperty().addListener(obs ->{
-			String enteredText = searchObject.getText();
-			if(enteredText==null || enteredText.length()==0)
-			{
-				filteredObjects.setPredicate(s->true);
-			}else
+			String enteredText = searchObject.getText().trim();
+			if(enteredText.isEmpty()) {
+				if(enteredText==null || enteredText.length()==0 || enteredText.contains(""))
+				{
+					System.out.println("in ActionEvent --> 2" + enteredText);
+					filteredObjects.setPredicate(s->true);
+					clonedAvailbleList.setItems(availableObList);
+					clonedAvailbleList.getItems().removeAll(selectedList.getItems());
+				}
+			}
+			else
 			{
 				filteredObjects.setPredicate(s->s.toLowerCase().startsWith(enteredText.toLowerCase()));
+				ObservableList<String> filteredObList = FXCollections.observableArrayList();
+				filteredObList.addAll(filteredObjects);
+				clonedAvailbleList.setItems(filteredObList);
 			}
 		});
-		clonedAvailbleList.setItems(filteredObjects);
-		clonedAvailbleList.refresh();
+		//filteredObList.addAll(filteredObjects);
+	    
+		clonedAvailbleList.refresh(); 
 	}
 	@FXML
 	public void download(ActionEvent ae) throws IOException {

@@ -98,7 +98,7 @@ public class TaskExecutor extends Task<HashMap<String,Object>>{
 			for(String objStr : objLst) {
 				updateMessage("Processing "+objStr+"..");
 				ExportWrapper exp = ApplicationContext.exportMap.get(objStr);
-				if(!exp.records.isEmpty()) {
+				
 					List<SObject> recList = exp.records;
 					List<String> fldLst = exp.fields;
 					File fileName = new File(ApplicationContext.directoryPath+objStr+".csv");
@@ -110,7 +110,7 @@ public class TaskExecutor extends Task<HashMap<String,Object>>{
 							fileWriter.append(ApplicationContext.COMMA_DELIMITER);
 						}
 						fileWriter.append('\n');
-					
+						if(!exp.records.isEmpty()) { 
 						int counter =0;
 						for(SObject rec : recList) {
 							counter++;
@@ -130,6 +130,8 @@ public class TaskExecutor extends Task<HashMap<String,Object>>{
 							}
 							fileWriter.append('\n');
 						}
+
+					}
 						fileWriter.flush();
 						fileWriter.close();
 						System.out.println("CSV file was created successfully !!!");
@@ -138,7 +140,6 @@ public class TaskExecutor extends Task<HashMap<String,Object>>{
 						System.out.println("Error in CsvFileWriter !!!");
 						ex.printStackTrace();
 					}
-				}
 			}
 			updateMessage("Exported "+objLst.size()+" Objects");
 		}else if(executeFor.equals(TASK.QUERYABLE))

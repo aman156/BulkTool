@@ -48,6 +48,7 @@ public class LoginController implements Initializable  {
 	@FXML
 	public void handleLogin(ActionEvent ae) throws IOException, InterruptedException {
 		System.out.println("LoginController-inside handleLogin");
+		loginBtn.setDisable(true);
 		spinner.setFitHeight(25);
 		spinner.setFitWidth(25);
 		spinner.setImage(new Image(Main.class.getResourceAsStream(ApplicationContext.spinnerPath)));
